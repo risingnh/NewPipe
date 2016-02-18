@@ -1,10 +1,12 @@
-package org.schabi.newpipe.crawler;
+package org.schabi.newpipe.extractor;
+
+import java.io.IOException;
 
 /**
- * Created by Christian Schabesberger on 30.01.16.
+ * Created by Christian Schabesberger on 23.08.15.
  *
- * Copyright (C) Christian Schabesberger 2016 <chris.schabesberger@mailbox.org>
- * CrawlingException.java is part of NewPipe.
+ * Copyright (C) Christian Schabesberger 2015 <chris.schabesberger@mailbox.org>
+ * StreamingService.java is part of NewPipe.
  *
  * NewPipe is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,18 +22,16 @@ package org.schabi.newpipe.crawler;
  * along with NewPipe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class CrawlingException extends Exception {
-    public CrawlingException() {}
-
-    public CrawlingException(String message) {
-        super(message);
+public interface StreamingService {
+    class ServiceInfo {
+        public String name = "";
     }
+    ServiceInfo getServiceInfo();
+    StreamExtractor getExtractorInstance(String url, Downloader downloader)
+            throws IOException, CrawlingException;
+    SearchEngine getSearchEngineInstance();
 
-    public CrawlingException(Throwable cause) {
-        super(cause);
-    }
+    VideoUrlIdHandler getUrlIdHandler();
 
-    public CrawlingException(String message, Throwable cause) {
-        super(message, cause);
-    }
+
 }
