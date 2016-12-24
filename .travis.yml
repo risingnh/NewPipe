@@ -36,4 +36,4 @@ before_script:
 script: ./gradlew --info build connectedCheck
 
 licenses:
-  - 'android-sdk-license-.+'
+  - '.+'
