@@ -1,10 +1,13 @@
 package org.schabi.newpipe.extractor.stream_info;
 
+import org.schabi.newpipe.extractor.AbstractStreamInfo;
+import org.schabi.newpipe.extractor.exceptions.ParsingException;
+
 /**
- * Created by Christian Schabesberger on 26.08.15.
+ * Created by Christian Schabesberger on 28.02.16.
  *
  * Copyright (C) Christian Schabesberger 2016 <chris.schabesberger@mailbox.org>
- * StreamPreviewInfo.java is part of NewPipe.
+ * StreamInfoItemExtractor.java is part of NewPipe.
  *
  * NewPipe is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +23,13 @@ package org.schabi.newpipe.extractor.stream_info;
  * along with NewPipe.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import org.schabi.newpipe.extractor.AbstractStreamInfo;
-
-/**Info object for previews of unopened videos, eg search results, related videos*/
-public class StreamPreviewInfo extends AbstractStreamInfo {
-    public int duration;
+public interface StreamInfoItemExtractor {
+    AbstractStreamInfo.StreamType getStreamType() throws ParsingException;
+    String getWebPageUrl() throws ParsingException;
+    String getTitle() throws ParsingException;
+    int getDuration() throws ParsingException;
+    String getUploader() throws ParsingException;
+    String getUploadDate() throws ParsingException;
+    long getViewCount() throws  ParsingException;
+    String getThumbnailUrl() throws  ParsingException;
 }
