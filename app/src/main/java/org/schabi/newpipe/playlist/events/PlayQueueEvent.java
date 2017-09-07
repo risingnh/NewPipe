@@ -16,5 +16,5 @@ public enum PlayQueueEvent {
     REMOVE,
 
     // sent when two streams swap place in the play queue
-    SWAP
+    MOVE
 }
