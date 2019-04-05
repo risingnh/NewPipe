@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package us.shandian.giga.postprocessing.io;
+package us.shandian.giga.io;
 
 import android.support.annotation.NonNull;
 
@@ -56,6 +56,6 @@ public class SharpInputStream extends InputStream {
 
     @Override
     public void close() {
-        base.dispose();
+        base.close();
     }
 }
