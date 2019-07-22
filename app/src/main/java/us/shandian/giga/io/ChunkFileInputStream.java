@@ -1,20 +1,22 @@
-package us.shandian.giga.postprocessing.io;
+package us.shandian.giga.io;
 
 import org.schabi.newpipe.streams.io.SharpStream;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 
 public class ChunkFileInputStream extends SharpStream {
 
-    private RandomAccessFile source;
+    private SharpStream source;
     private final long offset;
     private final long length;
     private long position;
 
-    public ChunkFileInputStream(File file, long start, long end, String mode) throws IOException {
-        source = new RandomAccessFile(file, mode);
+    public ChunkFileInputStream(SharpStream target, long start) throws IOException {
+        this(target, start, target.length());
+    }
+
+    public ChunkFileInputStream(SharpStream target, long start, long end) throws IOException {
+        source = target;
         offset = start;
         length = end - start;
         position = 0;
@@ -94,23 +96,19 @@ public class ChunkFileInputStream extends SharpStream {
     }
 
     @Override
-    public int available() {
+    public long available() {
         return (int) (length - position);
     }
 
     @SuppressWarnings("EmptyCatchBlock")
     @Override
-    public void dispose() {
-        try {
-            source.close();
-        } catch (IOException err) {
-        } finally {
-            source = null;
-        }
+    public void close() {
+        source.close();
+        source = null;
     }
 
     @Override
-    public boolean isDisposed() {
+    public boolean isClosed() {
         return source == null;
     }
 
@@ -147,7 +145,4 @@ public class ChunkFileInputStream extends SharpStream {
     public void write(byte[] buffer, int offset, int count) {
     }
 
-    @Override
-    public void flush() {
-    }
 }
