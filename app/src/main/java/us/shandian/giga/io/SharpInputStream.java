@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package us.shandian.giga.postprocessing.io;
+package us.shandian.giga.io;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.schabi.newpipe.streams.io.SharpStream;
 
@@ -14,6 +14,7 @@ import java.io.InputStream;
 
 /**
  * Wrapper for the classic {@link java.io.InputStream}
+ *
  * @author kapodamy
  */
 public class SharpInputStream extends InputStream {
@@ -49,11 +50,12 @@ public class SharpInputStream extends InputStream {
 
     @Override
     public int available() {
-        return base.available();
+        long res = base.available();
+        return res > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) res;
     }
 
     @Override
     public void close() {
-        base.dispose();
+        base.close();
     }
 }

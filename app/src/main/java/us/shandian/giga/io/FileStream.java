@@ -1,35 +1,27 @@
-package us.shandian.giga.postprocessing.io;
+package us.shandian.giga.io;
+
+import androidx.annotation.NonNull;
 
 import org.schabi.newpipe.streams.io.SharpStream;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
 
 /**
  * @author kapodamy
  */
 public class FileStream extends SharpStream {
 
-    public enum Mode {
-        Read,
-        ReadWrite
+    public RandomAccessFile source;
+
+    public FileStream(@NonNull File target) throws FileNotFoundException {
+        this.source = new RandomAccessFile(target, "rw");
     }
 
-    public RandomAccessFile source;
-    private final Mode mode;
-
-    public FileStream(String path, Mode mode) throws IOException {
-        String flags;
-
-        if (mode == Mode.Read) {
-            flags = "r";
-        } else {
-            flags = "rw";
-        }
-
-        this.mode = mode;
-        source = new RandomAccessFile(path, flags);
+    public FileStream(@NonNull String path) throws FileNotFoundException {
+        this.source = new RandomAccessFile(path, "rw");
     }
 
     @Override
@@ -39,7 +31,7 @@ public class FileStream extends SharpStream {
 
     @Override
     public int read(byte b[]) throws IOException {
-        return read(b, 0, b.length);
+        return source.read(b);
     }
 
     @Override
@@ -49,40 +41,37 @@ public class FileStream extends SharpStream {
 
     @Override
     public long skip(long pos) throws IOException {
-        FileChannel fc = source.getChannel();
-        fc.position(fc.position() + pos);
-        return pos;
+        return source.skipBytes((int) pos);
     }
 
     @Override
-    public int available() {
+    public long available() {
         try {
-            return (int) (source.length() - source.getFilePointer());
-        } catch (IOException ex) {
+            return source.length() - source.getFilePointer();
+        } catch (IOException e) {
             return 0;
         }
     }
 
-    @SuppressWarnings("EmptyCatchBlock")
     @Override
-    public void dispose() {
+    public void close() {
+        if (source == null) return;
         try {
             source.close();
         } catch (IOException err) {
-
-        } finally {
-            source = null;
+            // nothing to do
         }
+        source = null;
     }
 
     @Override
-    public boolean isDisposed() {
+    public boolean isClosed() {
         return source == null;
     }
 
     @Override
     public void rewind() throws IOException {
-        source.getChannel().position(0);
+        source.seek(0);
     }
 
     @Override
@@ -92,12 +81,22 @@ public class FileStream extends SharpStream {
 
     @Override
     public boolean canRead() {
-        return mode == Mode.Read || mode == Mode.ReadWrite;
+        return true;
     }
 
     @Override
     public boolean canWrite() {
-        return mode == Mode.ReadWrite;
+        return true;
+    }
+
+    @Override
+    public boolean canSeek() {
+        return true;
+    }
+
+    @Override
+    public boolean canSetLength() {
+        return true;
     }
 
     @Override
@@ -116,11 +115,17 @@ public class FileStream extends SharpStream {
     }
 
     @Override
-    public void flush() {
+    public void setLength(long length) throws IOException {
+        source.setLength(length);
     }
 
     @Override
-    public void setLength(long length) throws IOException {
-        source.setLength(length);
+    public void seek(long offset) throws IOException {
+        source.seek(offset);
+    }
+
+    @Override
+    public long length() throws IOException {
+        return source.length();
     }
 }

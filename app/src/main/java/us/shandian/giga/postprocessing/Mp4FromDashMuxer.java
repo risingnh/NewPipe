@@ -1,24 +1,22 @@
 package us.shandian.giga.postprocessing;
 
-import org.schabi.newpipe.streams.Mp4DashWriter;
+import org.schabi.newpipe.streams.Mp4FromDashWriter;
 import org.schabi.newpipe.streams.io.SharpStream;
 
 import java.io.IOException;
 
-import us.shandian.giga.get.DownloadMission;
-
 /**
  * @author kapodamy
  */
-class Mp4DashMuxer extends Postprocessing {
+class Mp4FromDashMuxer extends Postprocessing {
 
-    Mp4DashMuxer(DownloadMission mission) {
-        super(mission, 15360 * 1024/* 15 MiB */, true);
+    Mp4FromDashMuxer() {
+        super(true, true, ALGORITHM_MP4_FROM_DASH_MUXER);
     }
 
     @Override
     int process(SharpStream out, SharpStream... sources) throws IOException {
-        Mp4DashWriter muxer = new Mp4DashWriter(sources);
+        Mp4FromDashWriter muxer = new Mp4FromDashWriter(sources);
         muxer.parseSources();
         muxer.selectTracks(0, 0);
         muxer.build(out);
