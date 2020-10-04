@@ -12,7 +12,7 @@ assignees: ''
 
 - [ ] I checked, but didn't find any duplicates of this issue in the repo. <!-- Seriously, check. O_O -->
 - [ ] I have read the contribution guidelines given at https://github.com/TeamNewPipe/NewPipe/blob/HEAD/.github/CONTRIBUTING.md.
-- [ ] This issue contains only one feature request. I will open one issue per feature I want to request.
+- [ ] This issue contains only one feature request. I will open one issue for every feature I want to request.
 
 
 #### Describe the feature you want
