@@ -385,7 +385,7 @@ public final class BookmarkFragment extends BaseLocalListFragment<List<PlaylistL
             }
         }
 
-        if (isDisplayIndexModified) {
+        if (debounceSaver != null && isDisplayIndexModified) {
             debounceSaver.saveChanges();
         }
     }
